@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+option java_package = "in.kaligotla.allpermissionsimpl.proto";
+option java_multiple_files = true;
+
+message UserCredentials {
+  string token = 1;
+}
+
+message UserPermissions {
+  bool token = 1;
+}
+
+message OnboardState{
+  bool isOnboardedState = 1;
+}
