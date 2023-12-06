@@ -45,7 +45,5 @@ fun SettingsScreen(
 @Composable
 fun SettingsScreenPreview() {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
-    AllPermissionsImplTheme {
-        SettingsScreen(drawerState)
-    }
+    SettingsScreen(drawerState)
 }

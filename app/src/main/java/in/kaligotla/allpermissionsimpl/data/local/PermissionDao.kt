@@ -15,7 +15,7 @@ interface PermissionDao {
     @Query("SELECT * FROM permission")
     fun getPermissions(): LiveData<List<Permission>>
 
-    @Query("SELECT * FROM permission WHERE permission_id = :id")
+    @Query("SELECT * FROM permission WHERE permissionId = :id")
     fun getPermissionById(id: Int): LiveData<Permission>
 
     @Query(SQLITE_COUNT_QUERY)

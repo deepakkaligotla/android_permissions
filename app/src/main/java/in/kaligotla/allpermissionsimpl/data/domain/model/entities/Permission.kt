@@ -9,11 +9,11 @@ data class Permission(
 
     @PrimaryKey(autoGenerate = true)
     @field:SerializedName("permission_id")
-    var permission_id: Int,
+    var permissionId: Int,
 
     @field:SerializedName("permission_name")
-    val permission_name: String,
+    val permissionName: String,
 
     @field:SerializedName("is_granted")
-    val is_granted: Boolean
+    val isGranted: Boolean
 )

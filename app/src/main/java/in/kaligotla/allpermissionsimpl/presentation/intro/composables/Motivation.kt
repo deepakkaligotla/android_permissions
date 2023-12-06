@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import `in`.kaligotla.allpermissionsimpl.presentation.intro.IntroNavOption
+import `in`.kaligotla.allpermissionsimpl.proto.AppTheme
 import `in`.kaligotla.allpermissionsimpl.ui.previews.AllScreenPreview
 import `in`.kaligotla.allpermissionsimpl.ui.theme.AllPermissionsImplTheme
 
@@ -20,7 +21,7 @@ fun MotivationScreen(navController: NavController) = IntroCompose(
 @Composable
 fun MotivationPrivacyPreview() {
     val navController = rememberNavController()
-    AllPermissionsImplTheme {
+    AllPermissionsImplTheme(appTheme = AppTheme.Default) {
         MotivationScreen(navController = navController)
     }
 }

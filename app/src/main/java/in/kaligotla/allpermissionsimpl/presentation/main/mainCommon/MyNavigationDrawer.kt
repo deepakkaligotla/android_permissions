@@ -16,6 +16,7 @@ import `in`.kaligotla.allpermissionsimpl.navigation.mainGraph
 import `in`.kaligotla.allpermissionsimpl.navigation.subGraph
 import `in`.kaligotla.allpermissionsimpl.presentation.NavRoutes
 import `in`.kaligotla.allpermissionsimpl.presentation.intro.introGraph
+import `in`.kaligotla.allpermissionsimpl.proto.AppTheme
 import `in`.kaligotla.allpermissionsimpl.ui.components.appdrawer.AppDrawerContent
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -23,6 +24,7 @@ import `in`.kaligotla.allpermissionsimpl.ui.components.appdrawer.AppDrawerConten
 @Composable
 fun MyNavigationDrawer(
     navController: NavHostController,
+    userTheme: AppTheme,
     drawerState: DrawerState,
     onboardState: Boolean
 ) {
@@ -146,11 +148,11 @@ fun MyNavigationDrawer(
     ) {
         NavHost(
             navController,
-            startDestination = if (onboardState) NavRoutes.MainRoute.name else NavRoutes.IntroRoute.name
+            startDestination = if(onboardState) NavRoutes.MainRoute.name else NavRoutes.IntroRoute.name
         ) {
             introGraph(navController)
-            mainGraph(navController, drawerState)
-            subGraph(navController, drawerState)
+            mainGraph(navController, drawerState, userTheme)
+            subGraph(navController, drawerState, userTheme)
         }
     }
 }

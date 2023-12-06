@@ -1,9 +1,11 @@
 package `in`.kaligotla.allpermissionsimpl.data.repository.permission
 
 import androidx.lifecycle.LiveData
+import androidx.paging.PagingData
 import `in`.kaligotla.allpermissionsimpl.core.LoadDataService
 import `in`.kaligotla.allpermissionsimpl.core.Resource
 import `in`.kaligotla.allpermissionsimpl.data.domain.model.entities.Permission
+import kotlinx.coroutines.flow.Flow
 
 typealias permissionsDataFromMongo = LiveData<Resource<List<Permission>>>
 typealias permissionsDataFromSQLite = LiveData<List<Permission>>

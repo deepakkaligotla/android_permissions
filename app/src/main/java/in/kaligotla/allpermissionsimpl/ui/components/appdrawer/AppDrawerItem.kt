@@ -16,13 +16,13 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import `in`.kaligotla.allpermissionsimpl.core.DrawerParams
 import `in`.kaligotla.allpermissionsimpl.navigation.MainNavOption
+import `in`.kaligotla.allpermissionsimpl.proto.AppTheme
 import `in`.kaligotla.allpermissionsimpl.ui.theme.AllPermissionsImplTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun <T> AppDrawerItem(item: AppDrawerItemInfo<T>, onClick: (options: T) -> Unit) =
     Surface(
-        color = MaterialTheme.colorScheme.onPrimary,
         modifier = Modifier
             .width(180.dp)
             .padding(bottom = 5.dp, top = 5.dp)
@@ -63,7 +63,7 @@ class MainStateProvider : PreviewParameterProvider<AppDrawerItemInfo<MainNavOpti
 @Preview
 @Composable
 fun AppDrawerItemPreview(@PreviewParameter(MainStateProvider::class) state: AppDrawerItemInfo<MainNavOption>) {
-    AllPermissionsImplTheme {
+    AllPermissionsImplTheme(appTheme = AppTheme.Default) {
         AppDrawerItem(item = state, onClick = {})
     }
 }

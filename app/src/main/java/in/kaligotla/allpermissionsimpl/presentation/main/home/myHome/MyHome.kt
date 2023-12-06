@@ -41,28 +41,26 @@ import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import `in`.kaligotla.allpermissionsimpl.data.domain.model.entities.Permission
 import `in`.kaligotla.allpermissionsimpl.navigation.Screen.*
 import `in`.kaligotla.allpermissionsimpl.presentation.common.LaunchItem
+import `in`.kaligotla.allpermissionsimpl.proto.AppTheme
 import `in`.kaligotla.allpermissionsimpl.ui.components.appbar.AppBar
 import `in`.kaligotla.allpermissionsimpl.ui.theme.AllPermissionsImplTheme
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalPermissionsApi::class)
 @Composable
 fun MyHome(
+    userTheme: AppTheme,
     drawerState: DrawerState,
     viewModel: MyHomeViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
-    val lifecycleOwner = LocalLifecycleOwner.current
     val bm = context.getSystemService(Context.BATTERY_SERVICE) as BatteryManager
     val batLevel by remember { mutableStateOf(bm.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY)) }
     var lazyList by rememberSaveable { mutableStateOf(emptyList<Permission>().toMutableList()) }
 //    val refreshing by viewModel.isRefreshing
 //    val pullRefreshState = rememberPullRefreshState(refreshing, { viewModel.refresh() })
-    viewModel.getPermissionsCount(lifecycleOwner)
-    viewModel.setupObservers(lifecycleOwner)
     lazyList = viewModel.permissionsList.toMutableList()
 
-
-    AllPermissionsImplTheme {
+    AllPermissionsImplTheme(appTheme = userTheme) {
         Scaffold(
             modifier = Modifier.testTag("myTableTag"),
             topBar = { AppBar(drawerState = drawerState) }
@@ -85,7 +83,7 @@ fun MyHome(
 
                 if (lazyList.isNotEmpty()) {
                     val multiplePermissionsState = rememberMultiplePermissionsState(
-                        lazyList.map { permission -> permission.permission_name }.toMutableList()
+                        lazyList.map { permission -> permission.permissionName }.toMutableList()
                     )
                     CheckMultiplePermissions(multiplePermissionsState)
                 }

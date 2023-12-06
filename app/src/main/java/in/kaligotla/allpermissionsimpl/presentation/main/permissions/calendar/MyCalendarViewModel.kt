@@ -34,7 +34,6 @@ import `in`.kaligotla.allpermissionsimpl.core.Constants.PROJECTION_VISIBLE_INDEX
 import `in`.kaligotla.allpermissionsimpl.data.domain.model.entities.CalendarItem
 import `in`.kaligotla.allpermissionsimpl.data.domain.model.entities.EventItem
 import `in`.kaligotla.allpermissionsimpl.data.repository.permission.PermissionRepository
-import java.util.Arrays
 import javax.inject.Inject
 
 @HiltViewModel

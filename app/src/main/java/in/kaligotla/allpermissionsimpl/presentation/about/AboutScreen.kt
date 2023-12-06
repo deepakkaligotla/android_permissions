@@ -23,6 +23,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import `in`.kaligotla.allpermissionsimpl.presentation.rememberUserTheme
+import `in`.kaligotla.allpermissionsimpl.proto.AppTheme
 import `in`.kaligotla.allpermissionsimpl.ui.components.appbar.AppBar
 import `in`.kaligotla.allpermissionsimpl.ui.previews.AllScreenPreview
 import `in`.kaligotla.allpermissionsimpl.ui.theme.AllPermissionsImplTheme
@@ -146,7 +148,8 @@ fun AboutScreen(drawerState: DrawerState) {
 @Composable
 fun AboutScreenPreview() {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
-    AllPermissionsImplTheme {
+    val userTheme: AppTheme = rememberUserTheme()
+    AllPermissionsImplTheme(appTheme = userTheme) {
         AboutScreen(drawerState)
     }
 }

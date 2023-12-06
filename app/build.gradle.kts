@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -74,6 +72,9 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
+    implementation("androidx.compose.runtime:runtime-livedata:1.5.4")
+    implementation("androidx.compose.material:material-icons-extended:1.5.4")
+
     //util
     implementation("androidx.compose.ui:ui-util:1.5.4")
 
@@ -103,12 +104,21 @@ dependencies {
     //
     implementation("androidx.compose.foundation:foundation:1.5.4")
 
+    implementation("androidx.compose.animation:animation:1.6.0-beta02")
+    implementation("androidx.compose.animation:animation-graphics:1.6.0-beta02")
+
     //Accompanist
     implementation("com.google.accompanist:accompanist-navigation-animation:0.32.0")
     implementation("com.google.accompanist:accompanist-pager:0.32.0")
     implementation("com.google.accompanist:accompanist-pager-indicators:0.32.0")
     implementation("com.google.accompanist:accompanist-systemuicontroller:0.32.0")
     implementation("com.google.accompanist:accompanist-flowlayout:0.32.0")
+    implementation("com.google.accompanist:accompanist-webview:0.32.0")
+
+    //Exo
+    implementation("androidx.media3:media3-exoplayer:1.2.0")
+    implementation("androidx.media3:media3-exoplayer-hls:1.2.0")
+    implementation("androidx.media3:media3-ui:1.2.0")
 
     //Coil
     implementation("io.coil-kt:coil-compose:2.4.0")
@@ -157,6 +167,13 @@ dependencies {
 
     //Swipe refresh
     implementation("com.google.accompanist:accompanist-swiperefresh:0.33.2-alpha")
+
+    //Paging
+    implementation("androidx.paging:paging-runtime-ktx:3.3.0-alpha02")
+    testImplementation("androidx.paging:paging-common-ktx:3.3.0-alpha02")
+    implementation("androidx.paging:paging-compose:3.3.0-alpha02")
+
+    implementation("com.google.maps.android:maps-compose:4.3.0")
 }
 
 protobuf {

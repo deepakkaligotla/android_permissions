@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+option java_package = "in.kaligotla.allpermissionsimpl.proto";
+option java_multiple_files = true;
+
+enum AppTheme {
+  Light = 0;
+  Dark = 1;
+  Default = 2;
+}
+
+message MyAppTheme{
+  AppTheme userTheme = 1;
+}

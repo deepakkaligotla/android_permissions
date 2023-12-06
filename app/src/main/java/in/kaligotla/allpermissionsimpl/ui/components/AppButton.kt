@@ -46,7 +46,5 @@ fun AppButton(
 @AllPreviews
 @Composable
 fun AppButtonPreview() {
-    AllPermissionsImplTheme {
-        AppButton(text = R.string.next) {}
-    }
+    AppButton(text = R.string.next) {}
 }

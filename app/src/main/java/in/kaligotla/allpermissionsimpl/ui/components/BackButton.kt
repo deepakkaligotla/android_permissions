@@ -36,7 +36,5 @@ fun BackButton(onClick: OnClickFunction) {
 @AllPreviews
 @Composable
 fun BackButtonPreview() {
-    AllPermissionsImplTheme {
-        BackButton {}
-    }
+    BackButton {}
 }

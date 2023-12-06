@@ -2,6 +2,7 @@ package `in`.kaligotla.allpermissionsimpl.di
 
 import android.app.Application
 import android.app.Service
+import android.bluetooth.BluetoothAdapter
 import android.os.Build
 import androidx.annotation.RequiresApi
 import com.google.gson.Gson
@@ -20,11 +21,13 @@ import `in`.kaligotla.allpermissionsimpl.data.remote.PermissionRemoteDataSource
 import `in`.kaligotla.allpermissionsimpl.data.remote.PermissionService
 import `in`.kaligotla.allpermissionsimpl.data.repository.permission.PermissionRepository
 import `in`.kaligotla.allpermissionsimpl.data.repository.permission.PermissionRepositoryImpl
+import `in`.kaligotla.allpermissionsimpl.presentation.main.permissions.nearbyDevices.MyNearbyDevicesViewModel
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 import javax.inject.Named
+import javax.inject.Singleton
 
 @Module
 @InstallIn(ViewModelComponent::class)

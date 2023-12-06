@@ -4,8 +4,10 @@ import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -35,7 +37,8 @@ fun SensorItem(
         contentAlignment = Alignment.Center
     ) {
         Surface(
-            modifier = Modifier.scale(if (!isExpanded) 1f else 0.8f),
+            modifier = Modifier.width(if (isExpanded) LocalConfiguration.current.screenWidthDp.dp else 300.dp)
+                .height(if (isExpanded) LocalConfiguration.current.screenHeightDp.minus(400).dp else LocalConfiguration.current.screenHeightDp.dp),
             tonalElevation = 8.dp,
             shadowElevation = 16.dp,
             shape = MaterialTheme.shapes.extraLarge

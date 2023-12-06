@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -30,15 +29,23 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import `in`.kaligotla.allpermissionsimpl.R
+import `in`.kaligotla.allpermissionsimpl.presentation.intro.IntroViewModel
+import `in`.kaligotla.allpermissionsimpl.proto.AppTheme
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainTopBar(onboardState: Boolean, drawerState: DrawerState) {
+fun MainTopBar(onboardState: Boolean, drawerState: DrawerState, viewModel: IntroViewModel) {
+    var userTheme by rememberSaveable { mutableStateOf( AppTheme.Default) }
+    viewModel.userTheme.observe(LocalLifecycleOwner.current) {
+        userTheme = it.userTheme
+    }
+
     if (onboardState) {
         val contextForToast = LocalContext.current.applicationContext
         val coroutineScope = rememberCoroutineScope()
@@ -86,15 +93,6 @@ fun MainTopBar(onboardState: Boolean, drawerState: DrawerState) {
                 }
             },
             actions = {
-//                IconButton(onClick = {
-//                    Toast.makeText(contextForToast, "Add Clicked", Toast.LENGTH_SHORT)
-//                        .show()
-//                }) {
-//                    Icon(
-//                        imageVector = Icons.Default.Add,
-//                        contentDescription = "Add Items"
-//                    )
-//                }
                 IconButton(
                     onClick = {
                         Toast.makeText(
@@ -107,6 +105,25 @@ fun MainTopBar(onboardState: Boolean, drawerState: DrawerState) {
                     Icon(
                         imageVector = Icons.Default.Search,
                         contentDescription = "Search"
+                    )
+                }
+                IconButton(
+                    onClick = {
+                        if (userTheme == AppTheme.Light) {
+                            viewModel.saveUserTheme(AppTheme.Dark)
+                        } else {
+                            viewModel.saveUserTheme(AppTheme.Light)
+                        }
+                    }
+                ) {
+                    Icon(
+                        painter = if (userTheme == AppTheme.Light)
+                            painterResource(id = R.drawable.ic_dark_mode)
+                        else
+                            painterResource(id = R.drawable.ic_light_mode),
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onPrimary,
+                        modifier = Modifier.size(25.dp)
                     )
                 }
             },

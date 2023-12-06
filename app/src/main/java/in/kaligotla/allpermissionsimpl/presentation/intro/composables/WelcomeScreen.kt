@@ -20,8 +20,6 @@ fun WelcomeScreen(navController: NavController = rememberNavController()) = Intr
 @AllScreenPreview
 @Composable
 fun WelcomeScreenPreview() {
-    AllPermissionsImplTheme {
-        WelcomeScreen()
-    }
+    WelcomeScreen()
 }
 
