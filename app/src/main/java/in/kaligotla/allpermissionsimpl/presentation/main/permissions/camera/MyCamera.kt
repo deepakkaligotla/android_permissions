@@ -1,5 +1,7 @@
 package `in`.kaligotla.allpermissionsimpl.presentation.main.permissions.camera
 
+import android.util.Log
+import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,8 +14,17 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -34,7 +45,20 @@ fun MyCamera(
     drawerState: DrawerState,
     viewModel: MyCameraViewModel = hiltViewModel()
 ) {
+    val context = LocalContext.current
+    val lifecycle = LocalLifecycleOwner.current.lifecycle
     val permissionState = rememberPermissionState("android.permission.CAMERA")
+
+    DisposableEffect(true) {
+        Log.e("Compose State","RESUMED")
+        onDispose {
+            Log.e("Compose State","onDispose")
+        }
+    }
+
+    LaunchedEffect(true) {
+        Log.e("Compose State","LaunchedEffect")
+    }
 
     AllPermissionsImplTheme(appTheme = userTheme) {
         Scaffold(
@@ -58,11 +82,6 @@ fun MyCamera(
                 }
 
                 if (permissionState.status.isGranted) {
-                    Button(onClick = {
-
-                    }) {
-                        Text("Open Camera")
-                    }
 
                 } else {
                     Button(onClick = {

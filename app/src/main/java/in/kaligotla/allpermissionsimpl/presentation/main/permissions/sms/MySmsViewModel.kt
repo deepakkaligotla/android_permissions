@@ -3,19 +3,27 @@ package `in`.kaligotla.allpermissionsimpl.presentation.main.permissions.sms
 import android.annotation.SuppressLint
 import android.content.Context
 import android.database.Cursor
-import android.provider.MediaStore
 import android.provider.Telephony
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.core.database.getStringOrNull
 import androidx.lifecycle.ViewModel
+import com.google.gson.JsonObject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import `in`.kaligotla.allpermissionsimpl.data.domain.model.entities.SmsItem
 import `in`.kaligotla.allpermissionsimpl.presentation.main.mainCommon.getDateTime
-import java.io.File
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.http.Body
+import retrofit2.http.POST
 import javax.inject.Inject
+import kotlin.random.Random
 
 @HiltViewModel
 class MySmsViewModel @Inject constructor(

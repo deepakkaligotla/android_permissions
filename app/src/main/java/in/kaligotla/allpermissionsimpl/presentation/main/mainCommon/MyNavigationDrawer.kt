@@ -128,6 +128,12 @@ fun MyNavigationDrawer(
                         }
                     }
 
+                    MainNavOption.MyBiometrics -> {
+                        navController.navigate(onUserPickedOption.name) {
+                            popUpTo(NavRoutes.MainRoute.name)
+                        }
+                    }
+
                     MainNavOption.SettingsScreen -> {
                         navController.navigate(onUserPickedOption.name) {
                             popUpTo(NavRoutes.MainRoute.name)

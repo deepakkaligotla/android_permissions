@@ -2,7 +2,6 @@ package `in`.kaligotla.allpermissionsimpl.presentation.main.permissions.contacts
 
 import android.content.ContentResolver
 import android.net.Uri
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -23,7 +22,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.ElevatedCard
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -46,19 +44,19 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.rememberImagePainter
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import `in`.kaligotla.allpermissionsimpl.R
 import `in`.kaligotla.allpermissionsimpl.data.domain.model.entities.Contact
-import `in`.kaligotla.allpermissionsimpl.data.domain.model.entities.ContactGroup
 import `in`.kaligotla.allpermissionsimpl.navigation.Screen
 import `in`.kaligotla.allpermissionsimpl.presentation.rememberUserTheme
 import `in`.kaligotla.allpermissionsimpl.proto.AppTheme
 import `in`.kaligotla.allpermissionsimpl.ui.components.appbar.AppBar
 import `in`.kaligotla.allpermissionsimpl.ui.theme.AllPermissionsImplTheme
 
-@OptIn(ExperimentalPermissionsApi::class, ExperimentalFoundationApi::class)
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun MyContacts(
     userTheme: AppTheme,
@@ -91,20 +89,16 @@ fun MyContacts(
                 Column(modifier = Modifier.padding(top = 5.dp)) {
                     Row {
                         Text(
-                            text = "Contacts ${if(viewModel.contactsList.isNotEmpty()) viewModel.contactsList.size else 0}",
+                            text = "Contacts ${if(viewModel.contacts.collectAsStateWithLifecycle().value.isNotEmpty()) viewModel.contacts.collectAsStateWithLifecycle().value.size else 0}",
                             style = MaterialTheme.typography.headlineMedium
                         )
                     }
                 }
                 if (multiplePermissionsState.allPermissionsGranted) {
-                    if (contactsLazyList.isNullOrEmpty()) {
-                        Button(onClick = {
-                            contactsLazyList.toMutableList().clear()
-                            viewModel.getAllContactsGroupsID(context)
-                            contactsLazyList = viewModel.contactsList.toMutableList()
-                        }) {
-                            Text("Get Contacts")
-                        }
+                    if (contactsLazyList.isEmpty()) {
+                        contactsLazyList.toMutableList().clear()
+                        viewModel.getAllContactsGroupsID(context)
+                        contactsLazyList = viewModel.contacts.collectAsStateWithLifecycle().value
                     } else {
                         LazyVerticalGrid(
                             columns = GridCells.Adaptive(LocalConfiguration.current.screenWidthDp.minus(100).dp),

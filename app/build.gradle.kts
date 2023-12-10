@@ -6,6 +6,7 @@ plugins {
     id("com.google.devtools.ksp")
     id("org.jetbrains.kotlin.plugin.serialization")
     id("com.google.protobuf")
+    id("io.realm.kotlin")
 }
 
 android {
@@ -74,6 +75,7 @@ dependencies {
 
     implementation("androidx.compose.runtime:runtime-livedata:1.5.4")
     implementation("androidx.compose.material:material-icons-extended:1.5.4")
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.7.0-rc01")
 
     //util
     implementation("androidx.compose.ui:ui-util:1.5.4")
@@ -101,11 +103,13 @@ dependencies {
     //navigation
     implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
 
-    //
+    //compose foundation
     implementation("androidx.compose.foundation:foundation:1.5.4")
-
     implementation("androidx.compose.animation:animation:1.6.0-beta02")
     implementation("androidx.compose.animation:animation-graphics:1.6.0-beta02")
+
+    //Biometrics
+    implementation("androidx.biometric:biometric:1.2.0-alpha05")
 
     //Accompanist
     implementation("com.google.accompanist:accompanist-navigation-animation:0.32.0")
@@ -114,6 +118,12 @@ dependencies {
     implementation("com.google.accompanist:accompanist-systemuicontroller:0.32.0")
     implementation("com.google.accompanist:accompanist-flowlayout:0.32.0")
     implementation("com.google.accompanist:accompanist-webview:0.32.0")
+
+    //Camera
+    implementation("androidx.camera:camera-core:1.3.0")
+    implementation("androidx.camera:camera-camera2:1.3.0")
+    implementation("androidx.camera:camera-lifecycle:1.3.0")
+    implementation("androidx.camera:camera-view:1.3.0")
 
     //Exo
     implementation("androidx.media3:media3-exoplayer:1.2.0")
@@ -131,6 +141,7 @@ dependencies {
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
 
+
     //Room
     implementation("androidx.room:room-runtime:2.5.2")
     annotationProcessor("androidx.room:room-compiler:2.5.2")
@@ -141,6 +152,11 @@ dependencies {
     implementation("androidx.room:room-guava:2.5.2")
     testImplementation("androidx.room:room-testing:2.5.2")
     implementation("androidx.room:room-paging:2.5.2")
+
+    //MongoDB
+    implementation("io.realm.kotlin:library-base:1.11.0")
+    implementation("io.realm.kotlin:library-sync:1.11.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1")
 
     //Work Manager
     implementation("androidx.work:work-runtime-ktx:2.8.1")

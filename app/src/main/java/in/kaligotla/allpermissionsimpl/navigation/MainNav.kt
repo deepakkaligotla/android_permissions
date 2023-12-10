@@ -1,9 +1,7 @@
 package `in`.kaligotla.allpermissionsimpl.navigation
 
 import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.material3.DrawerState
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
@@ -16,6 +14,7 @@ import `in`.kaligotla.allpermissionsimpl.presentation.main.permissions.calendar.
 import `in`.kaligotla.allpermissionsimpl.presentation.main.permissions.callLogs.MyCallLogs
 import `in`.kaligotla.allpermissionsimpl.presentation.main.permissions.camera.MyCamera
 import `in`.kaligotla.allpermissionsimpl.presentation.main.permissions.contacts.MyContacts
+import `in`.kaligotla.allpermissionsimpl.presentation.main.permissions.extras.security.MyBiometrics
 import `in`.kaligotla.allpermissionsimpl.presentation.main.permissions.location.MyLocation
 import `in`.kaligotla.allpermissionsimpl.presentation.main.permissions.microphone.MyMicrophone
 import `in`.kaligotla.allpermissionsimpl.presentation.main.permissions.musicAudio.MyMusicAudio
@@ -28,8 +27,6 @@ import `in`.kaligotla.allpermissionsimpl.presentation.main.permissions.sms.MySms
 import `in`.kaligotla.allpermissionsimpl.presentation.settings.SettingsScreen
 import `in`.kaligotla.allpermissionsimpl.proto.AppTheme
 
-@RequiresApi(Build.VERSION_CODES.O)
-@OptIn(ExperimentalMaterial3Api::class)
 fun NavGraphBuilder.mainGraph(navController: NavHostController, drawerState: DrawerState, userTheme: AppTheme) {
     navigation(startDestination = MainNavOption.MyHome.name, route = NavRoutes.MainRoute.name) {
         composable(MainNavOption.MyHome.name) {
@@ -57,19 +54,27 @@ fun NavGraphBuilder.mainGraph(navController: NavHostController, drawerState: Dra
         }
 
         composable(MainNavOption.MyLocation.name) {
-            MyLocation(userTheme, drawerState)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                MyLocation(userTheme, drawerState)
+            }
         }
 
         composable(MainNavOption.MyMicrophone.name) {
-            MyMicrophone(userTheme, drawerState)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+                MyMicrophone(userTheme, drawerState)
+            }
         }
 
         composable(MainNavOption.MyMusicAudio.name) {
-            MyMusicAudio(userTheme, drawerState)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+                MyMusicAudio(userTheme, drawerState)
+            }
         }
 
         composable(MainNavOption.MyNearbyDevices.name) {
-            MyNearbyDevices(userTheme, drawerState)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+                MyNearbyDevices(userTheme, drawerState)
+            }
         }
 
         composable(MainNavOption.MyNotifications.name) {
@@ -77,11 +82,15 @@ fun NavGraphBuilder.mainGraph(navController: NavHostController, drawerState: Dra
         }
 
         composable(MainNavOption.MyPhone.name) {
-            MyPhone(userTheme, drawerState)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                MyPhone(userTheme, drawerState)
+            }
         }
 
         composable(MainNavOption.MyPhotosVideos.name) {
-            MyPhotosVideos(userTheme, drawerState)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                MyPhotosVideos(userTheme, drawerState)
+            }
         }
 
         composable(MainNavOption.MyPhysicalActivity.name) {
@@ -90,6 +99,10 @@ fun NavGraphBuilder.mainGraph(navController: NavHostController, drawerState: Dra
 
         composable(MainNavOption.MySms.name) {
             MySms(userTheme, drawerState)
+        }
+
+        composable(MainNavOption.MyBiometrics.name) {
+            MyBiometrics(userTheme, drawerState)
         }
 
         composable(MainNavOption.SettingsScreen.name) {
@@ -118,6 +131,7 @@ enum class MainNavOption {
     MyPhotosVideos,
     MyPhysicalActivity,
     MySms,
+    MyBiometrics,
     SettingsScreen,
     AboutScreen,
 }

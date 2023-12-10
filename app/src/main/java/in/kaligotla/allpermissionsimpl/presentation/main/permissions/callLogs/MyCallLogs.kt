@@ -44,6 +44,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import `in`.kaligotla.allpermissionsimpl.data.domain.model.CallLogItem
@@ -72,7 +73,7 @@ fun MyCallLogs(
         )
     )
 
-    var callLogslazyList by rememberSaveable { mutableStateOf(emptyList<CallLogItem>().toMutableList()) }
+    var callLogslazyList by rememberSaveable { mutableStateOf(emptyList<CallLogItem>()) }
     var callTypelazyList by rememberSaveable { mutableStateOf(emptyMap<String, List<CallLogItem>>()) }
     val callTypePagerState = rememberPagerState(pageCount = { callTypelazyList.size })
     val callLogsPagerState = rememberPagerState(pageCount = { callTypelazyList.keys.size })
@@ -99,9 +100,9 @@ fun MyCallLogs(
                 }
                 if (multiplePermissionsState.allPermissionsGranted) {
                     if (callLogslazyList.isNullOrEmpty()) {
-                        callLogslazyList.clear()
+                        callLogslazyList.toMutableList().clear()
                         viewModel.getCallLog(context)
-                        callLogslazyList = viewModel.callLogsList.toMutableList()
+                        callLogslazyList = viewModel.callLogs.collectAsStateWithLifecycle().value
                         callTypelazyList += mapOf(
                             Pair(
                                 "Incoming",

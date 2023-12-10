@@ -13,8 +13,12 @@ import androidx.core.database.getLongOrNull
 import androidx.core.database.getStringOrNull
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import `in`.kaligotla.allpermissionsimpl.data.domain.model.CallLogItem
 import `in`.kaligotla.allpermissionsimpl.data.domain.model.entities.Contact
 import `in`.kaligotla.allpermissionsimpl.data.repository.permission.PermissionRepository
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 
 @SuppressLint("Range")
@@ -23,8 +27,8 @@ class MyContactsViewModel @Inject constructor(
     
 ) : ViewModel() {
 
-    var contactsList by mutableStateOf(emptyList<Contact>())
-    private var contactsArray = ArrayList<Contact>()
+    private val _contacts = MutableStateFlow<List<Contact>>(emptyList())
+    val contacts: StateFlow<List<Contact>> = _contacts.asStateFlow()
 
     fun getAllContactsGroupsID(context: Context) {
         val uri = ContactsContract.Contacts.CONTENT_URI
@@ -45,10 +49,13 @@ class MyContactsViewModel @Inject constructor(
             val avatar = retrieveAvatar(contactId!!, context)
             val newContactItem = Contact(contactId.toString(), name, avatar.toString(),
                 phoneNumber["Home"], phoneNumber["Mobile"], phoneNumber["Work"], null)
-            addToContactArray(newContactItem)
+            if(contacts.value.isEmpty()) {
+                _contacts.value += listOf(newContactItem)
+            } else if(!contacts.value.contains(newContactItem)) {
+                _contacts.value += listOf(newContactItem)
+            }
         }
         cursor?.close()
-        contactsList = contactsArray.toMutableList()
     }
 
     private fun retrievePhoneNumber(contactId: Long, context: Context): Map<String, String> {
@@ -105,13 +112,5 @@ class MyContactsViewModel @Inject constructor(
                 ContactsContract.Contacts.Photo.CONTENT_DIRECTORY
             )
         } else null
-    }
-
-     private fun addToContactArray(newContactItem: Contact) {
-        if(contactsArray.isEmpty()) {
-            contactsArray.add(newContactItem)
-        } else if(!contactsArray.contains(newContactItem)) {
-            contactsArray.add(newContactItem)
-        }
     }
 }

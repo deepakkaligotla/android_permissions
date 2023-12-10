@@ -29,6 +29,7 @@ object Constants {
     const val MY_PHOTOS_VIDEOS_SCREEN = "MyPhotosVideos"
     const val MY_PHYSICAL_ACTIVITY_SCREEN = "MyPhysicalActivity"
     const val MY_SMS_SCREEN = "MySMS"
+    const val MY_BIOMETRICS_SCREEN = "MyBiometrics"
 
     const val EXTRAS_RETROFIT_BUILD = "retrofitBuild"
     const val PERMISSION_SERVICE = "permissionService"
@@ -36,58 +37,6 @@ object Constants {
     const val LOAD_DATA_SERVICE = "loadDataService"
 
     //Permission request code
-
-    const val ENGLISH_LOCALE_LANG = "en"
-    const val ARABIC_LOCALE_LANG = "ar"
-    const val DEFAULT_SYSTEM_LOCALE_LANG = "def"
-
-
-    //Calendar
-    val CALENDAR_PROJECTION = arrayOf(
-        CalendarContract.Calendars._ID,
-        CalendarContract.Calendars.CALENDAR_DISPLAY_NAME,
-        CalendarContract.Calendars.NAME,
-        CalendarContract.Calendars.CALENDAR_COLOR,
-        CalendarContract.Calendars.VISIBLE,
-        CalendarContract.Calendars.SYNC_EVENTS,
-        CalendarContract.Calendars.ACCOUNT_NAME,
-        CalendarContract.Calendars.ACCOUNT_TYPE,
-    )
-    const val PROJECTION_ID_INDEX = 0
-    const val PROJECTION_DISPLAY_NAME_INDEX = 1
-    const val PROJECTION_NAME_INDEX = 2
-    const val PROJECTION_CALENDAR_COLOR_INDEX = 3
-    const val PROJECTION_VISIBLE_INDEX = 4
-    const val PROJECTION_SYNC_EVENTS_INDEX = 5
-    const val PROJECTION_ACCOUNT_NAME_INDEX = 6
-    const val PROJECTION_ACCOUNT_TYPE_INDEX = 7
-
-    val EVENT_PROJECTION = arrayOf(
-        CalendarContract.Events._ID,
-        CalendarContract.Events.TITLE,
-        CalendarContract.Events.EVENT_LOCATION,
-        CalendarContract.Events.STATUS,
-        CalendarContract.Events.DTSTART,
-        CalendarContract.Events.DTEND,
-        CalendarContract.Events.DURATION,
-        CalendarContract.Events.ALL_DAY,
-        CalendarContract.Events.AVAILABILITY,
-        CalendarContract.Events.RRULE,
-        CalendarContract.Events.DISPLAY_COLOR,
-        CalendarContract.Events.VISIBLE,
-    )
-    const val PROJECTION_TITLE_INDEX = 1
-    const val PROJECTION_EVENT_LOCATION_INDEX = 2
-    const val PROJECTION_STATUS_INDEX = 3
-    const val PROJECTION_DTSTART_INDEX = 4
-    const val PROJECTION_DTEND_INDEX = 5
-    const val PROJECTION_DURATION_INDEX = 6
-    const val PROJECTION_ALL_DAY_INDEX = 7
-    const val PROJECTION_AVAILABILITY_INDEX = 8
-    const val PROJECTION_RRULE_INDEX = 9
-    const val PROJECTION_DISPLAY_COLOR_INDEX = 10
-    const val PROJECTION_VISIBLE = 11
-
     val CALL_LOG_PROJECTION = arrayOf(
         CallLog.Calls.NUMBER,
         CallLog.Calls.CACHED_NAME,
@@ -101,29 +50,6 @@ object Constants {
     const val PROJECTION_CALL_DATE_INDEX = 2
     const val PROJECTION_CALL_TYPE_INDEX = 3
     const val PROJECTION_CALL_DURATION_INDEX = 4
-
-    val CONTACTS_PROJECTION = arrayOf(
-        ContactsContract.Contacts.LOOKUP_KEY,
-        ContactsContract.Contacts._ID,
-        ContactsContract.Contacts.DISPLAY_NAME,
-        ContactsContract.Contacts.HAS_PHONE_NUMBER,
-        ContactsContract.Contacts.CONTACT_LAST_UPDATED_TIMESTAMP,
-        ContactsContract.Contacts.PHOTO_THUMBNAIL_URI,
-    )
-
-    const val PROJECTION_CONTACTS_LOOKUP_KEY = 0
-    const val PROJECTION_CONTACTS_INDEX = 1
-    const val PROJECTION_CONTACTS_DISPLAY_NAME = 2
-    const val PROJECTION_CONTACTS_HAS_PHONE_NUMBER = 3
-    const val PROJECTION_CONTACTS_LAST_UPDATED_TIMESTAMP = 4
-    const val PROJECTION_CONTACTS_PHOTO_THUMBNAIL_URI = 5
-
-    val CONTACT_PROJECTION = arrayOf(
-        ContactsContract.CommonDataKinds.Callable.CONTACT_ID
-    )
-
-    val myUuid: UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB")
-
 
     //SQLite queries
     const val SQLITE_COUNT_QUERY = "SELECT count(*) FROM permission"

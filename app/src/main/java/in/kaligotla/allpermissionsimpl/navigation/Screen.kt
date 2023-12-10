@@ -1,5 +1,6 @@
 package `in`.kaligotla.allpermissionsimpl.navigation
 
+import `in`.kaligotla.allpermissionsimpl.core.Constants.MY_BIOMETRICS_SCREEN
 import `in`.kaligotla.allpermissionsimpl.core.Constants.MY_BODY_SENSORS_SCREEN
 import `in`.kaligotla.allpermissionsimpl.core.Constants.MY_CALENDAR_SCREEN
 import `in`.kaligotla.allpermissionsimpl.core.Constants.MY_CALL_LOGS_SCREEN
@@ -32,4 +33,5 @@ sealed class Screen(val route: String) {
     object MyPhotosVideosScreen : Screen(MY_PHOTOS_VIDEOS_SCREEN)
     object MyPhysicalActivityScreen : Screen(MY_PHYSICAL_ACTIVITY_SCREEN)
     object MySMSScreen : Screen(MY_SMS_SCREEN)
+    object MyBiometricsScreen : Screen(MY_BIOMETRICS_SCREEN)
 }

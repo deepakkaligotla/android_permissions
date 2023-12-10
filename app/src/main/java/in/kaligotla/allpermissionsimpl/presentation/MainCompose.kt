@@ -2,6 +2,8 @@ package `in`.kaligotla.allpermissionsimpl.presentation
 
 import android.annotation.SuppressLint
 import android.os.Build
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -64,6 +66,7 @@ import `in`.kaligotla.allpermissionsimpl.presentation.intro.introGraph
 import `in`.kaligotla.allpermissionsimpl.presentation.main.mainCommon.MainBottomBar
 import `in`.kaligotla.allpermissionsimpl.presentation.main.mainCommon.MainTopBar
 import `in`.kaligotla.allpermissionsimpl.presentation.main.mainCommon.MyNavigationDrawer
+import `in`.kaligotla.allpermissionsimpl.presentation.main.mainCommon.MyObserver
 import `in`.kaligotla.allpermissionsimpl.proto.AppTheme
 import `in`.kaligotla.allpermissionsimpl.ui.components.appdrawer.AppDrawerContent
 import `in`.kaligotla.allpermissionsimpl.ui.theme.AllPermissionsImplTheme
@@ -79,9 +82,17 @@ fun MainCompose(
     drawerState: DrawerState = rememberDrawerState(initialValue = DrawerValue.Closed),
     vm: IntroViewModel = hiltViewModel()
 ) {
-    val orientation = LocalConfiguration.current.orientation
+    val context = LocalContext.current
     var userTheme by rememberSaveable { mutableStateOf( AppTheme.Default) }
     var myDestinaton = NavRoutes.IntroRoute.name
+    val observer = MyObserver(context, Handler(Looper.getMainLooper()))
+
+    DisposableEffect(Unit) {
+        observer.registerObserver()
+        onDispose {
+            observer.unregisterObserver()
+        }
+    }
 
     LaunchedEffect(LocalContext) {
         myDestinaton = if(vm.onboardState) NavRoutes.MainRoute.name else NavRoutes.IntroRoute.name

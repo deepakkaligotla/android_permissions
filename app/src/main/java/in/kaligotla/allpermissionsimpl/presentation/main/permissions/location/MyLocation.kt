@@ -19,6 +19,7 @@ import androidx.compose.material3.DrawerState
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -33,6 +34,7 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.work.Data
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
@@ -64,7 +66,6 @@ fun MyLocation(
     viewModel: MyLocationViewModel = hiltViewModel<MyLocationViewModelImpl>()
 ) {
     val context = LocalContext.current
-    val lifecycleOwner = LocalLifecycleOwner.current
     val locationMultiplePermissionsState = rememberMultiplePermissionsState(
         listOf("android.permission.ACCESS_FINE_LOCATION", "android.permission.ACCESS_COARSE_LOCATION")
     )
@@ -73,20 +74,26 @@ fun MyLocation(
     var url = rememberSaveableWebViewState()
     val navigator = rememberWebViewNavigator()
 
+    DisposableEffect(Unit) {
+        viewModel.getLocationLive(context)
+        liveLocations = viewModel.locations.value
+        onDispose {
+            liveLocations = emptyList()
+        }
+    }
+
     AllPermissionsImplTheme(appTheme = userTheme) {
         LaunchedEffect(liveLocations, url, navigator) {
             if (url.viewState == null) {
                 navigator.loadUrl("https://www.google.com/maps/")
             }
-            viewModel.locations.observe(lifecycleOwner) {it ->
-                liveLocations = it
-                url = WebViewState(WebContent.Url("https://www.google.com/maps/search/?api=1&query=${it.last().latitude},${it.last().longitude}"))
-            }
             if(liveLocations.isNotEmpty()) {
+                url = WebViewState(WebContent.Url("https://www.google.com/maps/search/?api=1&query=${liveLocations.last().latitude},${liveLocations.last().longitude}"))
                 navigator.loadUrl("https://www.google.com/maps/search/?api=1&query=${liveLocations.last().latitude},${liveLocations.last().longitude}")
                 navigator.reload()
             }
         }
+
         Scaffold(
             topBar = { AppBar(drawerState = drawerState) }
         ) {padding ->
@@ -99,8 +106,8 @@ fun MyLocation(
             ) {
                 if (locationMultiplePermissionsState.allPermissionsGranted) {
                     if (locationBackgroundPermissionState.status.isGranted) {
-                        if(liveLocations.isNullOrEmpty()) {
-                            viewModel.getLocationLive(context)
+                        if(liveLocations.isEmpty()) {
+
                         } else {
                             Box(
                                 modifier = Modifier.fillMaxSize(),

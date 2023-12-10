@@ -9,12 +9,17 @@ import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.google.android.gms.location.LocationAvailability
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import dagger.hilt.android.lifecycle.HiltViewModel
+import `in`.kaligotla.allpermissionsimpl.data.domain.model.entities.CalendarItem
 import `in`.kaligotla.allpermissionsimpl.data.domain.model.entities.LocationDetails
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 
 @RequiresApi(Build.VERSION_CODES.S)
@@ -22,12 +27,8 @@ import javax.inject.Inject
 @HiltViewModel
 class MyLocationViewModelImpl @Inject constructor(): MyLocationViewModel, ViewModel() {
 
-    private val _locationsList = MutableLiveData<List<LocationDetails>>()
-    override var locations: LiveData<List<LocationDetails>>
-        get() = _locationsList
-        set(value) {
-
-        }
+    private val _locations = MutableStateFlow<List<LocationDetails>>(emptyList())
+    override var locations: StateFlow<List<LocationDetails>> = _locations.asStateFlow()
 
     override fun getLocationLive(context: Context) {
         val locationRequest = LocationRequest.Builder(1)
@@ -35,12 +36,13 @@ class MyLocationViewModelImpl @Inject constructor(): MyLocationViewModel, ViewMo
             .build()
 
         val locationCallback = object : LocationCallback() {
+            override fun onLocationAvailability(availability: LocationAvailability) {
+                super.onLocationAvailability(availability)
+                Log.e("isLocationAvailable","${availability.isLocationAvailable}")
+            }
             override fun onLocationResult(locationResult: LocationResult) {
                 locationResult ?: return
-                for (location in locationResult.locations) {
-                    _locationsList.value = listOf(LocationDetails(location.latitude, location.longitude))
-                    Log.e("LatLng","Latitude: "+location.latitude+", Longitude: "+location.longitude)
-                }
+                _locations.value += listOf(LocationDetails(locationResult.locations.last().latitude, locationResult.locations.last().longitude))
             }
         }
 

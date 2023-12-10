@@ -1,8 +1,11 @@
 package `in`.kaligotla.allpermissionsimpl.presentation.main.permissions.sms
 
+import android.net.Uri
+import android.os.Handler
+import android.os.Looper
+import android.provider.Telephony
 import android.util.Log
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -27,6 +30,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -41,11 +46,13 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import `in`.kaligotla.allpermissionsimpl.data.domain.model.entities.SmsItem
 import `in`.kaligotla.allpermissionsimpl.navigation.Screen
 import `in`.kaligotla.allpermissionsimpl.presentation.common.MySimpleDialogueBox
+import `in`.kaligotla.allpermissionsimpl.presentation.main.mainCommon.MyObserver
 import `in`.kaligotla.allpermissionsimpl.presentation.rememberUserTheme
 import `in`.kaligotla.allpermissionsimpl.proto.AppTheme
 import `in`.kaligotla.allpermissionsimpl.ui.components.appbar.AppBar
@@ -58,9 +65,10 @@ fun MySms(
     drawerState: DrawerState,
     viewModel: MySmsViewModel = hiltViewModel()
 ) {
-
-    var smsLazyList by rememberSaveable { mutableStateOf(emptyList<SmsItem>()) }
     val context = LocalContext.current
+    val contentObserver = MyObserver(context, Handler(Looper.getMainLooper()))
+    var newSms: String? by rememberSaveable { mutableStateOf(null) }
+    var smsLazyList by rememberSaveable { mutableStateOf(emptyList<SmsItem>()) }
     var showSmsBody = rememberSaveable { mutableStateOf(false) }
     var selectedSms: SmsItem? by remember { mutableStateOf(null) }
     val multiplePermissionsState = rememberMultiplePermissionsState(
@@ -72,6 +80,17 @@ fun MySms(
             "android.permission.RECEIVE_WAP_PUSH"
         )
     )
+
+    DisposableEffect(Unit) {
+        contentObserver.registerObserver()
+        onDispose {
+            contentObserver.unregisterObserver()
+        }
+    }
+
+    LaunchedEffect(Unit) {
+
+    }
 
     AllPermissionsImplTheme(appTheme = userTheme) {
         Scaffold(
@@ -85,16 +104,23 @@ fun MySms(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Column(modifier = Modifier.padding(top = 5.dp)) {
+
+                Column(
+                    modifier = Modifier.padding(top = 5.dp),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
                     Row {
                         Text(
                             text = "SMS (${if (smsLazyList.isNotEmpty()) smsLazyList.size else 0})",
                             style = MaterialTheme.typography.headlineMedium
                         )
                     }
+                    newSms = contentObserver.newItem.collectAsStateWithLifecycle().value
+                    Text("New SMS: $newSms")
                 }
                 if (multiplePermissionsState.allPermissionsGranted) {
-                    if (smsLazyList.isNullOrEmpty()) {
+                    if (smsLazyList.isEmpty()) {
                         smsLazyList.toMutableList().clear()
                         viewModel.getAllSms(context)
                         smsLazyList = viewModel.smsList

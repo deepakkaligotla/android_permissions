@@ -2,9 +2,6 @@ package `in`.kaligotla.allpermissionsimpl.presentation.main.permissions.callLogs
 
 import android.content.Context
 import android.provider.CallLog
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import `in`.kaligotla.allpermissionsimpl.core.Constants.CALL_LOG_PROJECTION
@@ -15,6 +12,9 @@ import `in`.kaligotla.allpermissionsimpl.core.Constants.PROJECTION_CALL_NUMBER_I
 import `in`.kaligotla.allpermissionsimpl.core.Constants.PROJECTION_CALL_TYPE_INDEX
 import `in`.kaligotla.allpermissionsimpl.data.domain.model.CallLogItem
 import `in`.kaligotla.allpermissionsimpl.data.repository.permission.PermissionRepository
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import java.text.SimpleDateFormat
 import java.util.Date
 import javax.inject.Inject
@@ -24,8 +24,8 @@ import javax.inject.Inject
 class MyCallLogsViewModel @Inject constructor(
     private val repo: PermissionRepository
 ) : ViewModel()  {
-    var callLogsList by mutableStateOf(emptyList<CallLogItem>())
-    private var callLogsArray = ArrayList<CallLogItem>()
+    private val _callLogs = MutableStateFlow<List<CallLogItem>>(emptyList())
+    val callLogs: StateFlow<List<CallLogItem>> = _callLogs.asStateFlow()
 
     fun getCallLog(context: Context) {
         val uri = CallLog.Calls.CONTENT_URI
@@ -57,10 +57,9 @@ class MyCallLogsViewModel @Inject constructor(
                 type = callType(),
                 duration = callDuration
             )
-            callLogsArray.add(temp)
+            _callLogs.value += listOf(temp)
         }
         callLogCursor?.close()
-        callLogsList = callLogsArray.toList()
     }
 
 }

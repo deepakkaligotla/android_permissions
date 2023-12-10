@@ -97,6 +97,12 @@ object DrawerParams {
             R.string.drawer_sms_description
         ),
         AppDrawerItemInfo(
+            MainNavOption.MyBiometrics,
+            R.string.drawer_biometrics,
+            R.drawable.ic_biometrics,
+            R.string.drawer_biometrics_description
+        ),
+        AppDrawerItemInfo(
             MainNavOption.SettingsScreen,
             R.string.drawer_settings,
             R.drawable.ic_settings,

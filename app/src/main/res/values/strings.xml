@@ -19,6 +19,7 @@
     <string name="drawer_photos_videos">Photos and Videos</string>
     <string name="drawer_physical_activity">Physical activity</string>
     <string name="drawer_sms">SMS</string>
+    <string name="drawer_biometrics">Biometrics</string>
     <string name="drawer_settings">Settings</string>
     <string name="drawer_about">About</string>
 
@@ -38,6 +39,7 @@
     <string name="drawer_photos_videos_description">Photos and videos navigation button</string>
     <string name="drawer_physical_activity_description">Physical activity navigation button</string>
     <string name="drawer_sms_description">SMS navigation button</string>
+    <string name="drawer_biometrics_description">Biometrics navigation button</string>
     <string name="drawer_settings_description">Settings navigation button</string>
     <string name="drawer_info_description">About navigation button</string>
 

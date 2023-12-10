@@ -1,5 +1,10 @@
 package `in`.kaligotla.allpermissionsimpl.presentation.main.permissions.calendar
 
+import android.os.Build
+import android.os.Handler
+import android.os.Looper
+import android.provider.Telephony
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.layout.Arrangement
@@ -17,11 +22,12 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.ElevatedCard
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -36,19 +42,20 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.PermissionState
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import `in`.kaligotla.allpermissionsimpl.data.domain.model.entities.CalendarItem
 import `in`.kaligotla.allpermissionsimpl.data.domain.model.entities.EventItem
 import `in`.kaligotla.allpermissionsimpl.navigation.Screen
+import `in`.kaligotla.allpermissionsimpl.presentation.main.mainCommon.MyObserver
 import `in`.kaligotla.allpermissionsimpl.proto.AppTheme
 import `in`.kaligotla.allpermissionsimpl.ui.components.appbar.AppBar
 import `in`.kaligotla.allpermissionsimpl.ui.theme.AllPermissionsImplTheme
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalPermissionsApi::class,
-    ExperimentalFoundationApi::class
-)
+
+@RequiresApi(Build.VERSION_CODES.O)
+@OptIn(ExperimentalPermissionsApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun MyCalendar(
     userTheme: AppTheme,
@@ -59,10 +66,10 @@ fun MyCalendar(
     val multiplePermissionsState = rememberMultiplePermissionsState(
         listOf("android.permission.READ_CALENDAR", "android.permission.WRITE_CALENDAR")
     )
-    var calendarlazyList by rememberSaveable { mutableStateOf(emptyList<CalendarItem>().toMutableList()) }
-    var eventlazyList by rememberSaveable { mutableStateOf(emptyMap<Int, List<EventItem>>()) }
-    val calendarPagerState = rememberPagerState(pageCount = { calendarlazyList.size })
-    val eventPagerState = rememberPagerState(pageCount = { eventlazyList.size })
+    var calendarLazyList by rememberSaveable { mutableStateOf(emptyList<CalendarItem>()) }
+    var eventLazyList by rememberSaveable { mutableStateOf(emptyMap<Int, List<EventItem>>()) }
+    val calendarPagerState = rememberPagerState(pageCount = { calendarLazyList.size })
+    val eventPagerState = rememberPagerState(pageCount = { eventLazyList.size })
 
     AllPermissionsImplTheme(appTheme = userTheme) {
         Scaffold(
@@ -85,10 +92,9 @@ fun MyCalendar(
                 }
 
                 if (multiplePermissionsState.allPermissionsGranted) {
-                    if (calendarlazyList.isNullOrEmpty()) {
-                        calendarlazyList.clear()
+                    if (calendarLazyList.isEmpty()) {
                         viewModel.getCalendars(context)
-                        calendarlazyList = viewModel.calendarList.toMutableList()
+                        calendarLazyList = viewModel.calendars.collectAsStateWithLifecycle().value.toMutableList()
                     } else {
                         HorizontalPager(
                             modifier = Modifier
@@ -108,11 +114,11 @@ fun MyCalendar(
                                 Orientation.Vertical
                             )
                         ) { index ->
-                            viewModel.getEvents(calendarlazyList[index].id.toString(), context)
-                            eventlazyList += mapOf(
+                            viewModel.getEvents(calendarLazyList[index].id.toString(), context)
+                            eventLazyList += mapOf(
                                 Pair(
-                                    calendarlazyList[index].id.toInt(),
-                                    viewModel.calendarEventList
+                                    calendarLazyList[index].id.toInt(),
+                                    viewModel.calendarEvents.collectAsStateWithLifecycle().value.toMutableList()
                                 )
                             )
                             ElevatedCard(
@@ -131,15 +137,15 @@ fun MyCalendar(
                                     horizontalAlignment = Alignment.CenterHorizontally
                                 ) {
                                     Text(
-                                        text = calendarlazyList[index].displayName.toString(),
+                                        text = calendarLazyList[index].displayName.toString(),
                                         fontSize = 20.sp,
                                         modifier = Modifier.padding(10.dp),
                                         textAlign = TextAlign.Justify,
                                         color = Color.Green
                                     )
                                     MyCalendarGroup(
-                                        key = calendarlazyList[index].id.toString(),
-                                        eventlazyList = eventlazyList
+                                        key = calendarLazyList[index].id.toString(),
+                                        eventlazyList = eventLazyList
                                     )
                                 }
                             }
