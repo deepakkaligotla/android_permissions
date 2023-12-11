@@ -1,4 +1,4 @@
-const sockerServerUrl = ""
+const sockerServerUrl = "https://kaligotla-in-61c2d1318f30.herokuapp.com/"
 const hostToLive = "http://localhost"
 
 const socket = require('socket.io-client')(sockerServerUrl)
