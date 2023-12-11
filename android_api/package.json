@@ -1,0 +1,26 @@
+{
+  "name": "backend_server",
+  "version": "1.0.0",
+  "description": "Android Data Transfer",
+  "main": "index.js",
+  "scripts": {
+    "android": "nodemon ./index.js",
+    "start": "npm run android",
+    "stop": "sudo lsof -t -i tcp:3000 -s tcp:listen",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Deepak Kaligotla",
+  "license": "ISC",
+  "dependencies": {
+    "config": "^3.3.9",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "http": "^0.0.1-security",
+    "mongoose": "^8.0.3",
+    "nodemon": "^3.0.2",
+    "passport-local-mongoose": "^8.0.0",
+    "socket.io": "^4.7.2",
+    "socket.io-client": "^4.7.2",
+    "superagent": "^8.1.2"
+  }
+}
